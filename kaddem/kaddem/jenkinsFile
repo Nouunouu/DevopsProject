@@ -24,8 +24,13 @@ pipeline {
         }
         stage('Code Build') {
             steps {
-                sh 'cd kaddem/kaddem && mvn clean package -Dmaven.test.skip=true'
-                sh 'mvn install -Dmaven.test.skip=true'
+                sh '''
+                    # Navigate to the directory containing the pom.xml file
+                    cd kaddem/kaddem
+                    # Run Maven commands
+                    mvn clean package -Dmaven.test.skip=true
+                    mvn install -Dmaven.test.skip=true
+                '''
             }
         }
         stage('SonarQube') {
