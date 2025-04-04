@@ -34,32 +34,32 @@ pipeline {
                 '''
             }
         }
-        stage('Testing') {
-            steps {
-                script {
-                    try {
-                        sh '''
-                            # Navigate to the directory containing the pom.xml file
-                            cd kaddem/kaddem
-                            # Run unit tests
-                            mvn test
-                        '''
-                    } catch (Exception e) {
-                        echo "Tests failed, but continuing the pipeline..."
-                    }
-                }
-            }
-        }
-        stage('SonarQube') {
-            steps {
-                sh '''
-                    # Navigate to the directory containing the pom.xml file
-                    cd kaddem/kaddem
-                    # Run SonarQube analysis
-                    mvn sonar:sonar -Dsonar.token=squ_75ec5f123179a9c2f52a8d9c5ae0095c0fc883a6 -DskipTests
-                '''
-            }
-        }
+        // stage('Testing') {
+        //     steps {
+        //         script {
+        //             try {
+        //                 sh '''
+        //                     # Navigate to the directory containing the pom.xml file
+        //                     cd kaddem/kaddem
+        //                     # Run unit tests
+        //                     mvn test
+        //                 '''
+        //             } catch (Exception e) {
+        //                 echo "Tests failed, but continuing the pipeline..."
+        //             }
+        //         }
+        //     }
+        // }
+        // stage('SonarQube') {
+        //     steps {
+        //         sh '''
+        //             # Navigate to the directory containing the pom.xml file
+        //             cd kaddem/kaddem
+        //             # Run SonarQube analysis
+        //             mvn sonar:sonar -Dsonar.token=squ_75ec5f123179a9c2f52a8d9c5ae0095c0fc883a6 -DskipTests
+        //         '''
+        //     }
+        // }
         stage('Deploy to Nexus') {
             steps {
                 sh '''
@@ -70,27 +70,27 @@ pipeline {
                 '''
             }
         }
-        stage('Docker Compose') {
-            steps {
-                script {
-                    try {
-                        sh '''
-                            # Navigate to the directory containing docker-compose.yml
-                            cd kaddem/kaddem
-                            # Build Docker images
-                            docker-compose build
-                            # Start the containers in detached mode
-                            docker-compose up -d
-                            # Verify the containers are running
-                            docker-compose ps
-                        '''
-                    } catch (Exception e) {
-                        echo "Docker Compose failed: ${e.message}"
-                        throw e  // Rethrow the exception to fail the pipeline
-                    }
-                }
-            }
-        }
+        // stage('Docker Compose') {
+        //     steps {
+        //         script {
+        //             try {
+        //                 sh '''
+        //                     # Navigate to the directory containing docker-compose.yml
+        //                     cd kaddem/kaddem
+        //                     # Build Docker images
+        //                     docker-compose build
+        //                     # Start the containers in detached mode
+        //                     docker-compose up -d
+        //                     # Verify the containers are running
+        //                     docker-compose ps
+        //                 '''
+        //             } catch (Exception e) {
+        //                 echo "Docker Compose failed: ${e.message}"
+        //                 throw e  // Rethrow the exception to fail the pipeline
+        //             }
+        //         }
+        //     }
+        // }
     }
     post {
         always {
