@@ -35,7 +35,7 @@ pipeline {
         }
         stage('SonarQube') {
             steps {
-                sh 'mvn sonar:sonar -Dsonar.token=squ_75ec5f123179a9c2f52a8d9c5ae0095c0fc883a6 -Dmaven.test.skip=true';
+                sh 'cd kaddem/kaddem && mvn sonar:sonar -Dsonar.token=squ_75ec5f123179a9c2f52a8d9c5ae0095c0fc883a6 -Dmaven.test.skip=true';
             }
         }
     }
