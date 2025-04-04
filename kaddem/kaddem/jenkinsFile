@@ -8,7 +8,7 @@ pipeline {
     }
     environment {
         APP_ENV = "DEV"
-        NEXUS_REPO_URL = "http://127.0.0.1:8081/repository/spring-releases/"  // Replace with your Nexus repository URL
+        NEXUS_REPO_URL = "http://127.0.0.1:8081/repository/maven-releases/"  // Replace with your Nexus repository URL
         MAVEN_SETTINGS = "/usr/share/maven/conf/settings.xml"  // Use a managed settings.xml file in Jenkins
     }
     stages {
