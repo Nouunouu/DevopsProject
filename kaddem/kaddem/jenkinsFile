@@ -66,11 +66,27 @@ pipeline {
                     # Navigate to the directory containing the pom.xml file
                     cd kaddem/kaddem
                     # Deploy the artifact to Nexus
-                    mvn deploy 
+                    mvn deploy --settings /usr/share/maven/conf/settings.xml -DskipTests
                 '''
             }
         }
     }
+    stage('Docker Compose') {
+            steps {
+                script {
+                    sh '''
+                        # Navigate to the directory containing docker-compose.yml
+                        cd kaddem/kaddem
+                        # Build Docker images
+                        docker-compose build
+                        # Start the containers in detached mode
+                        docker-compose up -d
+                        # Verify the containers are running
+                        docker-compose ps
+                    '''
+                }
+            }
+        }
     post {
         always {
             echo "======always======"
