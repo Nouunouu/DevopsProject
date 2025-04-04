@@ -78,11 +78,11 @@ pipeline {
                             # Navigate to the directory containing docker-compose.yml
                             cd kaddem/kaddem
                             # Build Docker images
-                            sudo docker-compose build
+                             docker-compose build
                             # Start the containers in detached mode
-                            sudo docker-compose up -d
+                             docker-compose up -d
                             # Verify the containers are running
-                            sudo docker-compose ps
+                             docker-compose ps
                         '''
                     } catch (Exception e) {
                         echo "Docker Compose failed: ${e.message}"
