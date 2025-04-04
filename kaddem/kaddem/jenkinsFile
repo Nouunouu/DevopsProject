@@ -34,42 +34,42 @@ pipeline {
                 '''
             }
         }
-        // stage('Testing') {
-        //     steps {
-        //         script {
-        //             try {
-        //                 sh '''
-        //                     # Navigate to the directory containing the pom.xml file
-        //                     cd kaddem/kaddem
-        //                     # Run unit tests
-        //                     mvn test
-        //                 '''
-        //             } catch (Exception e) {
-        //                 echo "Tests failed, but continuing the pipeline..."
-        //             }
-        //         }
-        //     }
-        // }
-        // stage('SonarQube') {
-        //     steps {
-        //         sh '''
-        //             # Navigate to the directory containing the pom.xml file
-        //             cd kaddem/kaddem
-        //             # Run SonarQube analysis
-        //             mvn sonar:sonar -Dsonar.token=squ_75ec5f123179a9c2f52a8d9c5ae0095c0fc883a6 -DskipTests
-        //         '''
-        //     }
-        // }
-        // stage('Deploy to Nexus') {
-        //     steps {
-        //         sh '''
-        //             # Navigate to the directory containing the pom.xml file
-        //             cd kaddem/kaddem
-        //             # Deploy the artifact to Nexus
-        //             mvn deploy --settings ${MAVEN_SETTINGS} -DskipTests
-        //         '''
-        //     }
-        // }
+        stage('Testing') {
+            steps {
+                script {
+                    try {
+                        sh '''
+                            # Navigate to the directory containing the pom.xml file
+                            cd kaddem/kaddem
+                            # Run unit tests
+                            mvn test
+                        '''
+                    } catch (Exception e) {
+                        echo "Tests failed, but continuing the pipeline..."
+                    }
+                }
+            }
+        }
+        stage('SonarQube') {
+            steps {
+                sh '''
+                    # Navigate to the directory containing the pom.xml file
+                    cd kaddem/kaddem
+                    # Run SonarQube analysis
+                    mvn sonar:sonar -Dsonar.token=squ_75ec5f123179a9c2f52a8d9c5ae0095c0fc883a6 -DskipTests
+                '''
+            }
+        }
+        stage('Deploy to Nexus') {
+            steps {
+                sh '''
+                    # Navigate to the directory containing the pom.xml file
+                    cd kaddem/kaddem
+                    # Deploy the artifact to Nexus
+                    mvn deploy --settings ${MAVEN_SETTINGS} -DskipTests
+                '''
+            }
+        }
         stage('Docker Compose') {
             steps {
                 script {
@@ -95,6 +95,18 @@ pipeline {
     post {
         always {
             echo "======always======"
+            script {
+                try {
+                    sh '''
+                        # Navigate to the directory containing docker-compose.yml
+                        cd kaddem/kaddem
+                        # Stop and remove Docker containers
+                        sudo docker-compose down
+                    '''
+                } catch (Exception e) {
+                    echo "Failed to stop and remove Docker containers: ${e.message}"
+                }
+            }
         }
         success {
             echo "=====pipeline executed successfully ====="
