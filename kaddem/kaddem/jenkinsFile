@@ -8,6 +8,7 @@ pipeline {
     }
     environment {
         APP_ENV = "DEV"
+        NEXUS_REPO_URL = "http://<nexus-host>:8081/repository/spring-releases/"  // Replace with your Nexus repository URL
     }
     stages {
         stage('Checkout Code') {
@@ -56,6 +57,16 @@ pipeline {
                     cd kaddem/kaddem
                     # Run SonarQube analysis
                     mvn sonar:sonar -Dsonar.token=squ_75ec5f123179a9c2f52a8d9c5ae0095c0fc883a6 -Dmaven.test.skip=true
+                '''
+            }
+        }
+        stage('Deploy to Nexus') {
+            steps {
+                sh '''
+                    # Navigate to the directory containing the pom.xml file
+                    cd kaddem/kaddem
+                    # Deploy the artifact to Nexus
+                    mvn deploy -Dmaven.test.skip=true
                 '''
             }
         }
