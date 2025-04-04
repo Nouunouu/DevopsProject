@@ -60,37 +60,37 @@ pipeline {
         //         '''
         //     }
         // }
-        stage('Deploy to Nexus') {
-            steps {
-                sh '''
-                    # Navigate to the directory containing the pom.xml file
-                    cd kaddem/kaddem
-                    # Deploy the artifact to Nexus
-                    mvn deploy --settings ${MAVEN_SETTINGS} -DskipTests
-                '''
-            }
-        }
-        // stage('Docker Compose') {
+        // stage('Deploy to Nexus') {
         //     steps {
-        //         script {
-        //             try {
-        //                 sh '''
-        //                     # Navigate to the directory containing docker-compose.yml
-        //                     cd kaddem/kaddem
-        //                     # Build Docker images
-        //                     docker-compose build
-        //                     # Start the containers in detached mode
-        //                     docker-compose up -d
-        //                     # Verify the containers are running
-        //                     docker-compose ps
-        //                 '''
-        //             } catch (Exception e) {
-        //                 echo "Docker Compose failed: ${e.message}"
-        //                 throw e  // Rethrow the exception to fail the pipeline
-        //             }
-        //         }
+        //         sh '''
+        //             # Navigate to the directory containing the pom.xml file
+        //             cd kaddem/kaddem
+        //             # Deploy the artifact to Nexus
+        //             mvn deploy --settings ${MAVEN_SETTINGS} -DskipTests
+        //         '''
         //     }
         // }
+        stage('Docker Compose') {
+            steps {
+                script {
+                    try {
+                        sh '''
+                            # Navigate to the directory containing docker-compose.yml
+                            cd kaddem/kaddem
+                            # Build Docker images
+                            docker-compose build
+                            # Start the containers in detached mode
+                            docker-compose up -d
+                            # Verify the containers are running
+                            docker-compose ps
+                        '''
+                    } catch (Exception e) {
+                        echo "Docker Compose failed: ${e.message}"
+                        throw e  // Rethrow the exception to fail the pipeline
+                    }
+                }
+            }
+        }
     }
     post {
         always {
